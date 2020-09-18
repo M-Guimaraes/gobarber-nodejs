@@ -2,7 +2,10 @@ const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig.json');
 module.exports = {
   clearMocks: true,
+  collectCoverage: true,
+  collectCoverageFrom: ['<rootDir>/src/modules/**/services/*.ts'],
   coverageDirectory: 'coverage',
+  coverageReporters: ['text-summary', 'lcov'],
   coverageProvider: 'v8',
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -10,12 +13,7 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/src/',
   }),
-  collectCoverageFrom: [
-    '<rootDir>/src/modules/**/services/*.ts'
-  ],
+  collectCoverageFrom: ['<rootDir>/src/modules/**/services/*.ts'],
 
-  coverageReporters: [
-    "text-summary",
-    "lcov",
-  ],
+  coverageReporters: ['text-summary', 'lcov'],
 };
