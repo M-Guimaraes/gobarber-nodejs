@@ -1,5 +1,7 @@
 export default interface ICreateUserDTO {
   name: string;
   email: string;
-  password: string | Promise<string>;
+  password: string;
 }
+
+// password: string | Promise<string>;
