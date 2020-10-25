@@ -1,9 +1,9 @@
 class AppError {
   public readonly message: string;
 
-  public readonly statusCode: number | undefined;
+  public readonly statusCode: number;
 
-  constructor(message: string, statusCode?: number | undefined) {
+  constructor(message: string, statusCode: number) {
     this.message = message;
     this.statusCode = statusCode;
   }

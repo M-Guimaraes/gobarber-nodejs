@@ -1,10 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
-import IUsersRepostory from '../repositories/IUsersRepository';
-
 import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepostory from '../repositories/IUsersRepository';
 
 interface IRequest {
   user_id: string;
@@ -22,7 +22,7 @@ class UpdateProfile {
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
-  ) {}
+  ) { }
 
   public async execute({
     user_id,
@@ -34,13 +34,13 @@ class UpdateProfile {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User not found.');
+      throw new AppError('User not found.', 400);
     }
 
     const userWithUpdatedEmail = await this.usersRepository.findByEmail(email);
 
     if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user_id) {
-      throw new AppError('E-mail already in use.');
+      throw new AppError('E-mail already in use.', 400);
     }
 
     user.name = name;
@@ -49,6 +49,7 @@ class UpdateProfile {
     if (password && !old_password) {
       throw new AppError(
         'You need to inform the old password to set a new password.',
+        400,
       );
     }
 
@@ -59,7 +60,7 @@ class UpdateProfile {
       );
 
       if (!checkOldPassword) {
-        throw new AppError('Old password does not match.');
+        throw new AppError('Old password does not match.', 400);
       }
 
       user.password = await this.hashProvider.generateHash(password);

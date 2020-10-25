@@ -10,9 +10,14 @@ import Appointment from '../../infra/typeorm/entities/Appointment';
 class AppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[] = [];
 
-  public async findByDate(date: Date): Promise<Appointment | undefined> {
-    const findAppointment = this.appointments.find(appintment =>
-      isEqual(appintment.date, date),
+  public async findByDate(
+    date: Date,
+    provider_id: string,
+  ): Promise<Appointment | undefined> {
+    const findAppointment = this.appointments.find(
+      appointment =>
+        isEqual(appointment.date, date) &&
+        appointment.provider_id === provider_id,
     );
 
     return findAppointment;
@@ -38,10 +43,10 @@ class AppointmentsRepository implements IAppointmentsRepository {
     provider_id,
   }: IFindAllInMonthFromProviderDTO): Promise<Appointment[]> {
     const appointments = this.appointments.filter(
-      appointments =>
-        appointments.provider_id === provider_id &&
-        getMonth(appointments.date) + 1 === month &&
-        getYear(appointments.date) === year,
+      appointment =>
+        appointment.provider_id === provider_id &&
+        getMonth(appointment.date) + 1 === month &&
+        getYear(appointment.date) === year,
     );
     return appointments;
   }
@@ -53,11 +58,11 @@ class AppointmentsRepository implements IAppointmentsRepository {
     provider_id,
   }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
     const appointments = this.appointments.filter(
-      appointments =>
-        appointments.provider_id === provider_id &&
-        getDate(appointments.date) === day &&
-        getMonth(appointments.date) + 1 === month &&
-        getYear(appointments.date) === year,
+      appointment =>
+        appointment.provider_id === provider_id &&
+        getDate(appointment.date) === day &&
+        getMonth(appointment.date) + 1 === month &&
+        getYear(appointment.date) === year,
     );
     return appointments;
   }
